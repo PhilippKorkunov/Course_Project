@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Course_Project"
         mc:Ignorable="d"
-        Title="Регистрация" Height="450" Width="600">
+        Title="Регистрация" Height="450" Width="500">
     <Window.Resources>
         <Style x:Key="passwordBox" TargetType="PasswordBox">
             <EventSetter Event="PasswordChanged" Handler="PasswordChanged"/>
@@ -21,20 +21,24 @@
             </LinearGradientBrush>
         </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="15"/>
             <RowDefinition Height="80"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="15"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="40*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="1" Text="Регистрация" HorizontalAlignment="Center" VerticalAlignment="Center"
+        <TextBlock Grid.Row="1" Text="Создание учетной записи" HorizontalAlignment="Center" VerticalAlignment="Center"
                    FontSize="24"/>
 
         <TextBox x:Name="loginBox" Grid.Row="2" Background="White" Width="350" Height="25" 
@@ -44,7 +48,7 @@
                    FontSize="12" Padding="3" Style="{StaticResource passwordBox}"/>
 
         <TextBlock IsHitTestVisible="False" Text="Введите логин" Grid.Row="2" VerticalAlignment="Center"
-                    Margin="50,0,0,0" Foreground="DimGray">
+                    Margin="75,0,0,0" Foreground="DimGray">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -58,26 +62,71 @@
         </TextBlock>
 
         <TextBlock  x:Name="passwordBlock" IsHitTestVisible="False" Text="Введите пароль" Grid.Row="4" VerticalAlignment="Center"
-                    Margin="50,0,0,0" Foreground="DimGray">
+                    Margin="75,0,0,0" Foreground="DimGray">
+        </TextBlock>
+
+        <PasswordBox x:Name="comfirmPasswordBox" Grid.Row="6" Background="White" Width="350" Height="25" 
+                   FontSize="12" Padding="3" Style="{StaticResource passwordBox}"/>
+
+        <TextBlock  x:Name="comfirmPasswordBlock" IsHitTestVisible="False" Text="Повторите пароль" Grid.Row="6" VerticalAlignment="Center"
+                    Margin="75,0,0,0" Foreground="DimGray">
+        </TextBlock>
+
+        <TextBox x:Name="mailBox" Grid.Row="8" Background="White" Width="350" Height="25" 
+                 TextAlignment="Justify" FontSize="12" Padding="3"/>
+
+        <TextBlock IsHitTestVisible="False" Text="Введите почту" Grid.Row="8" VerticalAlignment="Center"
+                    Margin="75,0,0,0" Foreground="DimGray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=mailBox}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
         </TextBlock>
 
 
-        <TextBlock Text="Показать пароль" Grid.Row="5" Width="100" Height="20" FontSize="12"
-                   VerticalAlignment="Center"  Margin="-200,0,0,0"/>
+        <TextBox x:Name="surnameBox" Grid.Row="10" Background="White" Width="350" Height="25" 
+                 TextAlignment="Justify" FontSize="12" Padding="3"/>
 
-        <CheckBox x:Name="showPasswordCheckBox" Grid.Row="5" 
-                  Margin="-325,0,0,0" Height="20" Width="20" VerticalAlignment="Center"
-                  IsThreeState="False"/>
+        <TextBlock IsHitTestVisible="False" Text="Введите фамилию" Grid.Row="10" VerticalAlignment="Center"
+                    Margin="75,0,0,0" Foreground="DimGray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=surnameBox}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-        <Button x:Name="logInButton" Grid.Row="6" Width="150" Height="25" Content="Войти"
-                Background="Cornsilk"/>
+        <TextBox x:Name="nameBox" Grid.Row="12" Background="White" Width="350" Height="25" 
+                 TextAlignment="Justify" FontSize="12" Padding="3"/>
 
-        <TextBlock Text="Не зарегестрированы?" Grid.Row="8"
-                   HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
-                   Height="20" Width="150"/>
 
-        <Button x:Name="registrationButton" Grid.Row="9" Width="150" Height="25"
-                 Background="Cornsilk" Content="Зарегистрироваться"/>
+        <TextBlock IsHitTestVisible="False" Text="Введите имя" Grid.Row="12" VerticalAlignment="Center"
+                    Margin="75,0,0,0" Foreground="DimGray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=nameBox}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <Button x:Name="registrationButton" Grid.Row="14" Width="150" Height="25"
+                 Background="Cornsilk" Content="Создать"/>
 
     </Grid>
 </Window>

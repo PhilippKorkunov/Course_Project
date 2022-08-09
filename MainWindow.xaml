@@ -75,12 +75,12 @@
         <Button x:Name="logInButton" Grid.Row="6" Width="150" Height="25" Content="Войти"
                 Background="Cornsilk"/>
 
-        <TextBlock Text="Не зарегестрированы?" Grid.Row="8"
+        <TextBlock Text="Нет учетной записи?" Grid.Row="8"
                    HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
                    Height="20" Width="150"/>
 
         <Button x:Name="registrationButton" Grid.Row="9" Width="150" Height="25"
-                 Background="Cornsilk" Content="Зарегистрироваться"/>
+                 Background="Cornsilk" Content="Создать учетную запись"/>
 
     </Grid>
 </Window>
