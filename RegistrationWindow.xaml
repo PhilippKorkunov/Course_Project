@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Course_Project"
         mc:Ignorable="d"
-        Title="Регистрация" Height="450" Width="500">
+        Title="Регистрация" MinHeight="575" MinWidth="500" MaxHeight="575" MaxWidth="475">
     <Window.Resources>
         <Style x:Key="passwordBox" TargetType="PasswordBox">
             <EventSetter Event="PasswordChanged" Handler="PasswordChanged"/>
@@ -35,7 +35,12 @@
             <RowDefinition Height="10"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="10"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="1" Text="Создание учетной записи" HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -89,11 +94,28 @@
             </TextBlock.Style>
         </TextBlock>
 
-
-        <TextBox x:Name="surnameBox" Grid.Row="10" Background="White" Width="350" Height="25" 
+        <TextBox x:Name="phoneNumberBox" Grid.Row="10" Background="White" Width="350" Height="25" 
                  TextAlignment="Justify" FontSize="12" Padding="3"/>
 
-        <TextBlock IsHitTestVisible="False" Text="Введите фамилию" Grid.Row="10" VerticalAlignment="Center"
+        <TextBlock IsHitTestVisible="False" Text="Введите номер телефона" Grid.Row="10" VerticalAlignment="Center"
+                    Margin="75,0,0,0" Foreground="DimGray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=phoneNumberBox}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+
+        <TextBox x:Name="surnameBox" Grid.Row="12" Background="White" Width="350" Height="25" 
+                 TextAlignment="Justify" FontSize="12" Padding="3"/>
+
+        <TextBlock IsHitTestVisible="False" Text="Введите фамилию" Grid.Row="12" VerticalAlignment="Center"
                     Margin="75,0,0,0" Foreground="DimGray">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
@@ -107,11 +129,11 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <TextBox x:Name="nameBox" Grid.Row="12" Background="White" Width="350" Height="25" 
+        <TextBox x:Name="nameBox" Grid.Row="14" Background="White" Width="350" Height="25" 
                  TextAlignment="Justify" FontSize="12" Padding="3"/>
 
 
-        <TextBlock IsHitTestVisible="False" Text="Введите имя" Grid.Row="12" VerticalAlignment="Center"
+        <TextBlock IsHitTestVisible="False" Text="Введите имя" Grid.Row="14" VerticalAlignment="Center"
                     Margin="75,0,0,0" Foreground="DimGray">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
@@ -125,8 +147,29 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <Button x:Name="registrationButton" Grid.Row="14" Width="150" Height="25"
+        <TextBox x:Name="patronymicBox" Grid.Row="16" Background="White" Width="350" Height="25" 
+                 TextAlignment="Justify" FontSize="12" Padding="3"/>
+
+
+        <TextBlock IsHitTestVisible="False" Text="Введите отчество (если есть)" Grid.Row="16" VerticalAlignment="Center"
+                    Margin="75,0,0,0" Foreground="DimGray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=patronymicBox}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <Button x:Name="registrationButton" Grid.Row="18" Width="150" Height="25"
                  Background="Cornsilk" Content="Создать"/>
+
+        <Button x:Name="returnButton" Grid.Row="19" Width="150" Height="25"
+                 Background="Cornsilk" Content="Вернуться к авторизации"/>
 
     </Grid>
 </Window>

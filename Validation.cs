@@ -70,7 +70,32 @@ namespace Course_Project
             MessageBox.Show("Ошибка!\nТакой почты не существует!");
         }
 
-        static bool IsNameAndSurnameValid(string name, string surname) 
+        static bool IsPhoneNumberValid(string number)
+        {
+            if (string.IsNullOrEmpty(number) || number.Length<11 || number.Length>12) { return false; }
+
+            string code;
+            
+            if (number.Length == 11) {code = number[0].ToString();}
+            else { code = number[..2]; }
+
+            if (!(code == "8" || code == "+7")) { return false; }
+
+            string phoneWithoutCode = number.Substring(code.Length, number.Length - code.Length);
+
+            long a;
+            if (!long.TryParse(phoneWithoutCode, out a)) { return false; }
+
+
+            return true;
+        }
+
+        static void PhoneNumberMessageBox()
+        {
+            MessageBox.Show("Ошибка!\nНеверный формат номера телефона!");
+        }
+
+        static bool IsNameAndSurnameAndPatronymicValid(string name, string surname, string patronymic) 
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname))
             {
@@ -95,12 +120,23 @@ namespace Course_Project
                 }
             }
 
+            if (!string.IsNullOrEmpty(patronymic))
+            {
+                foreach (char symbol in surname)
+                {
+                    if (!validSymbols.Contains(symbol))
+                    {
+                        return false;
+                    }
+                }
+            }
+
             return true;
         }
 
         static void NameAndSurnameMessageBox()
         {
-            MessageBox.Show("Ошибка!\nВ имени и фамилии могут использоваться только буквы русского алфавита!");
+            MessageBox.Show("Ошибка!\nВ ФИО могут использоваться только буквы русского алфавита!");
         }
 
         internal static bool IsLoginingValid(string login, string password)
@@ -122,7 +158,8 @@ namespace Course_Project
             return isValid;
         }
 
-        internal static bool IsRegistrationValid(string login, string password, string mail, string name, string surname)
+        internal static bool IsRegistrationValid(string login, string password, string mail, string number,
+            string name, string surname, string patronymic)
         {
             bool isValid = true;
 
@@ -144,7 +181,13 @@ namespace Course_Project
                 MailMessageBox();
             }
 
-            if (!IsNameAndSurnameValid(name, surname))
+            if (!IsPhoneNumberValid(number))
+            {
+                isValid = false;
+                PhoneNumberMessageBox();
+            }
+
+            if (!IsNameAndSurnameAndPatronymicValid(name, surname, patronymic))
             {
                 isValid = false;
                 NameAndSurnameMessageBox();

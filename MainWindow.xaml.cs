@@ -44,6 +44,7 @@ namespace Course_Project
 
             if (isValid && isAuthorized)
             {
+                //WorkWindow open
                 Close();
             }
         }

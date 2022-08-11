@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace Course_Project
 {
@@ -24,6 +16,14 @@ namespace Course_Project
             InitializeComponent();
 
             registrationButton.Click += (s, e) => Registation();
+            returnButton.Click += (s, e) => Return();
+        }
+
+        private void Return()
+        {
+            var mainWindow = new MainWindow();
+            mainWindow.Show();
+            Close();
         }
 
         public void PasswordChanged(object sender, RoutedEventArgs e)
@@ -49,23 +49,44 @@ namespace Course_Project
 
         public void Registation()
         {
+            var sqlConnection = OpenConnection();
+
+            SqlCommand sqlCommand = new SqlCommand(
+                $"INSERT INTO [Table] (id_user, Name, Surname, Login, Password, Email, PhoneNumber) " +
+                $"VALUES (N'1', N'llll', N'kkkkkk', N'dddd', N'ooo', N'qqqq', N'dkkdkdkd')", sqlConnection);
+
+            MessageBox.Show(sqlCommand.ExecuteNonQuery().ToString());
+            sqlConnection.CloseAsync();
+
             string login = loginBox.Text;
             string password = passwordBox.Password;
             string comfirmingPassword = comfirmPasswordBox.Password;
             string mail = mailBox.Text;
+            string number = phoneNumberBox.Text;
             string name = nameBox.Text;
             string surname = surnameBox.Text;
+            string patronymic = patronymicBox.Text;
 
             if (IsPasswordCompare(password, comfirmingPassword))
             {
-                if (Validation.IsRegistrationValid(login, password, mail, name, surname))
+                if (Validation.IsRegistrationValid(login, password, mail, number, name, surname, patronymic))
                 {
                     MessageBox.Show("Учетная запись создана! Дождитесь подтверждения от администратора, " +
                         "после чего учетная запись станет активной");
-                    //NewWindow.Open
+
+
+                    Return();
                     Close();
                 }
             }
+        }
+
+        SqlConnection OpenConnection()
+        {
+            string connection = System.Configuration.ConfigurationManager.ConnectionStrings["UsersDB"].ToString();
+            SqlConnection sqlConnection = new SqlConnection(connection);
+            sqlConnection.Open();
+            return sqlConnection;
         }
 
         static bool IsPasswordCompare(string password, string comfirmingPassword)
