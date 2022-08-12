@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Course_Project
+namespace Course_Project.AllWindows
 {
     /// <summary>
-    /// Логика взаимодействия для WorkWindow.xaml
+    /// Логика взаимодействия для WorkWindowForSuperUsers.xaml
     /// </summary>
-    public partial class WorkWindow : Window
+    public partial class WorkWindowForSuperUsers : Window
     {
-        public WorkWindow()
+        public WorkWindowForSuperUsers()
         {
             InitializeComponent();
         }

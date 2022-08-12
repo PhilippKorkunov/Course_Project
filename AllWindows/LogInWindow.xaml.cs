@@ -1,35 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using Course_Project.AllWindows;
+using Course_Project.Processing;
+
 
 namespace Course_Project
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class LogInWindow : Window
     {
-        public MainWindow()
+        public LogInWindow()
         {
             InitializeComponent();
 
             logInButton.Click += (s, e) => UserCheck();
             registrationButton.Click += (s, e) => RegistrationPage();
-            showPasswordButton.Click += (s, e) => ShowPassword();
-
-
+            //showPasswordButton.Click += (s, e) => ShowPassword();
         }
 
         bool isShowen = false;
@@ -38,13 +25,28 @@ namespace Course_Project
         {
             string login = loginBox.Text;
             string password = passwordBox.Password;
+            bool isAdmin, isSuperUser;
 
             bool isValid = Validation.IsLoginingValid(login, password);
-            bool isAuthorized = Authorization.TryAuthtorizate(login, password);
+            bool isAuthorized = new Authorization().TryAuthtorizate(login, password, out isAdmin, out isSuperUser);
 
             if (isValid && isAuthorized)
             {
-                //WorkWindow open
+                if (isAdmin)
+                {
+                    WorkWindowForAdmins workWindow = new WorkWindowForAdmins();
+                    workWindow.Show();
+                }
+                else if (isSuperUser)
+                {
+                    WorkWindowForSuperUsers workWindow = new WorkWindowForSuperUsers();
+                    workWindow.Show();
+                }
+                else
+                {
+                    WorkWindowForUsers workWindow = new WorkWindowForUsers();
+                    workWindow.Show();
+                }
                 Close();
             }
         }
@@ -69,7 +71,7 @@ namespace Course_Project
             }
         }
 
-        async void ShowPassword()
+       /* async void ShowPassword()
         {
             passwordShowBlock.Text = passwordBox.Password;
             passwordShowBlock.Visibility = Visibility.Visible;
@@ -79,9 +81,9 @@ namespace Course_Project
             {
                 Thread.Sleep(1000);
                 passwordShowBlock.Visibility = Visibility.Collapsed;
-                passwordBox.Password = passwordShowBlock.Text; 
+                passwordBox.Password = passwordShowBlock.Text;
             });
-        }
+        }*/
 
     }
 }

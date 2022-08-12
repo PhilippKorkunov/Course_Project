@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Windows;
-
+using Course_Project.Processing;
 
 namespace Course_Project
 {
@@ -20,7 +20,7 @@ namespace Course_Project
 
         private void Return()
         {
-            var mainWindow = new MainWindow();
+            var mainWindow = new LogInWindow();
             mainWindow.Show();
             Close();
         }
@@ -69,22 +69,31 @@ namespace Course_Project
                     SqlCommand sqlCommand = new SqlCommand("INSERT INTO [Users] (Name, Surname, Patronymic, Email, PhoneNumber, Login, Password) " +
                         $"VALUES (N'{name}', N'{surname}', N'{patronymic}', '{mail}', '{number}', '{login}', CONVERT(varbinary, '{password}'))", sqlConnection);
 
+                    SqlCommand sqlCommandCheckSuperUser = new SqlCommand(
+                        $"SELECT Login FROM SuperUsers\r\nWhere Login = '{login}'", sqlConnection);
 
                     if (isConneceted)
                     {
                         try
                         {
-                            sqlCommand.ExecuteNonQuery();
+                            if (!sqlCommandCheckSuperUser.ExecuteReader().HasRows)
+                            {
+                                sqlCommand.ExecuteNonQuery();
+                            }
+                            else
+                            {
+                                MessageBox.Show($"Логин {login} уже занят. Придумайте другой логин!");
+                                isAdded = false;
+                            }
                         }
                         catch (SqlException ex)
                         {
                             string exeption = ex.Message;
                             if (exeption.Contains(login)) { MessageBox.Show($"Логин {login} уже занят. Придумайте другой логин!"); }
-                            if (exeption.Contains(mail)) { MessageBox.Show($"Почта {mail} уже привязана к другому аккаунту!"); }
-                            if (exeption.Contains(number)) { MessageBox.Show($"Телефон {number} уже привязан к другому аккаунту!"); }
+                            else if (exeption.Contains(mail)) { MessageBox.Show($"Почта {mail} уже привязана к другому аккаунту!"); }
+                            else if (exeption.Contains(number)) { MessageBox.Show($"Телефон {number} уже привязан к другому аккаунту!"); }
 
                             isAdded = false;
-
                         }
                         finally
                         {
@@ -98,7 +107,6 @@ namespace Course_Project
                         }
 
                         Return();
-                        Close();
                     }
                     else
                     {

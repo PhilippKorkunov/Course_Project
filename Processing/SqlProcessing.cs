@@ -1,7 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System.Configuration;
 
-namespace Course_Project
+namespace Course_Project.Processing
 {
     internal class SqlProcessing
     {
@@ -16,6 +16,7 @@ namespace Course_Project
                 return true;
             }
 
+            sqlConnection.CloseAsync();
             return false;
         }
     }

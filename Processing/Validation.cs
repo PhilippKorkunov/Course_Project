@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.ComponentModel.DataAnnotations;
 
-namespace Course_Project
+namespace Course_Project.Processing
 {
     internal class Validation
     {
@@ -12,14 +12,14 @@ namespace Course_Project
 
             string validSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_@-";
 
-            if (validSymbols.Substring(validSymbols.Length - 3,3).Contains(login[0]) || 
+            if (validSymbols.Substring(validSymbols.Length - 3, 3).Contains(login[0]) ||
                 validSymbols.Substring(validSymbols.Length - 3, 3).Contains(login[login.Length - 1]))
             {
                 return false;
             }
 
 
-            foreach(char symbol in login)
+            foreach (char symbol in login)
             {
                 if (!validSymbols.Contains(symbol))
                 {
@@ -72,11 +72,11 @@ namespace Course_Project
 
         static bool IsPhoneNumberValid(string number)
         {
-            if (string.IsNullOrEmpty(number) || number.Length<11 || number.Length>12) { return false; }
+            if (string.IsNullOrEmpty(number) || number.Length < 11 || number.Length > 12) { return false; }
 
             string code;
-            
-            if (number.Length == 11) {code = number[0].ToString();}
+
+            if (number.Length == 11) { code = number[0].ToString(); }
             else { code = number[..2]; }
 
             if (!(code == "8" || code == "+7")) { return false; }
@@ -95,7 +95,7 @@ namespace Course_Project
             MessageBox.Show("Ошибка!\nНеверный формат номера телефона!");
         }
 
-        static bool IsNameAndSurnameAndPatronymicValid(string name, string surname, string patronymic) 
+        static bool IsNameAndSurnameAndPatronymicValid(string name, string surname, string patronymic)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname))
             {
