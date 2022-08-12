@@ -1,0 +1,1 @@
+﻿INSERT INTO SuperUsers (Login, Password) VALUES ('Admin', CONVERT(varbinary,'Admin')) 
