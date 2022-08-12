@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Data;
+﻿using System;
 using System.Data.SqlClient;
 using System.Windows;
 
@@ -49,15 +48,6 @@ namespace Course_Project
 
         public void Registation()
         {
-            var sqlConnection = OpenConnection();
-
-            SqlCommand sqlCommand = new SqlCommand(
-                $"INSERT INTO [Table] (id_user, Name, Surname, Login, Password, Email, PhoneNumber) " +
-                $"VALUES (N'1', N'llll', N'kkkkkk', N'dddd', N'ooo', N'qqqq', N'dkkdkdkd')", sqlConnection);
-
-            MessageBox.Show(sqlCommand.ExecuteNonQuery().ToString());
-            sqlConnection.CloseAsync();
-
             string login = loginBox.Text;
             string password = passwordBox.Password;
             string comfirmingPassword = comfirmPasswordBox.Password;
@@ -67,13 +57,41 @@ namespace Course_Project
             string surname = surnameBox.Text;
             string patronymic = patronymicBox.Text;
 
-            if (IsPasswordCompare(password, comfirmingPassword))
+            if (IsPasswordsEquals(password, comfirmingPassword))
             {
                 if (Validation.IsRegistrationValid(login, password, mail, number, name, surname, patronymic))
                 {
-                    MessageBox.Show("Учетная запись создана! Дождитесь подтверждения от администратора, " +
-                        "после чего учетная запись станет активной");
+                    bool isAdded = true;
 
+                    var sqlConnection = SqlProcessing.OpenConnection("UsersDB");
+
+                    SqlCommand sqlCommand = new SqlCommand("INSERT INTO [Users] (Name, Surname, Patronymic, Email, PhoneNumber, Login, Password) " +
+                        $"VALUES (N'{name}', N'{surname}', N'{patronymic}', '{mail}', '{number}', '{login}', CONVERT(varbinary, '{password}'))", sqlConnection);
+
+                    try
+                    {
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                    catch (SqlException ex)
+                    {
+                        string exeption = ex.Message;
+                        if (exeption.Contains(login)) { MessageBox.Show($"Логин {login} уже занят. Придумайте другой логин!"); }
+                        if (exeption.Contains(mail)) { MessageBox.Show($"Почта {mail} уже привязана к другому аккаунту!"); }
+                        if (exeption.Contains(number)) { MessageBox.Show($"Телефон {number} уже привязан к другому аккаунту!"); }
+
+                        isAdded = false;
+                        
+                    }
+                    finally
+                    {
+                        sqlConnection.CloseAsync();
+                    }
+
+                    if (isAdded) 
+                    {
+                        MessageBox.Show("Учетная запись создана! Дождитесь подтверждения от администратора, " +
+                        "после чего учетная запись станет активной");
+                    }
 
                     Return();
                     Close();
@@ -81,15 +99,8 @@ namespace Course_Project
             }
         }
 
-        SqlConnection OpenConnection()
-        {
-            string connection = System.Configuration.ConfigurationManager.ConnectionStrings["UsersDB"].ToString();
-            SqlConnection sqlConnection = new SqlConnection(connection);
-            sqlConnection.Open();
-            return sqlConnection;
-        }
 
-        static bool IsPasswordCompare(string password, string comfirmingPassword)
+        static bool IsPasswordsEquals(string password, string comfirmingPassword)
         {
             if (password != comfirmingPassword)
             {
