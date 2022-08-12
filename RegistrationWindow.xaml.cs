@@ -63,38 +63,47 @@ namespace Course_Project
                 {
                     bool isAdded = true;
 
-                    var sqlConnection = SqlProcessing.OpenConnection("UsersDB");
+                    SqlConnection sqlConnection;
+                    bool isConneceted = SqlProcessing.TryOpenConnection("UsersDB", out sqlConnection);
 
                     SqlCommand sqlCommand = new SqlCommand("INSERT INTO [Users] (Name, Surname, Patronymic, Email, PhoneNumber, Login, Password) " +
                         $"VALUES (N'{name}', N'{surname}', N'{patronymic}', '{mail}', '{number}', '{login}', CONVERT(varbinary, '{password}'))", sqlConnection);
 
-                    try
-                    {
-                        sqlCommand.ExecuteNonQuery();
-                    }
-                    catch (SqlException ex)
-                    {
-                        string exeption = ex.Message;
-                        if (exeption.Contains(login)) { MessageBox.Show($"Логин {login} уже занят. Придумайте другой логин!"); }
-                        if (exeption.Contains(mail)) { MessageBox.Show($"Почта {mail} уже привязана к другому аккаунту!"); }
-                        if (exeption.Contains(number)) { MessageBox.Show($"Телефон {number} уже привязан к другому аккаунту!"); }
 
-                        isAdded = false;
-                        
-                    }
-                    finally
+                    if (isConneceted)
                     {
-                        sqlConnection.CloseAsync();
-                    }
+                        try
+                        {
+                            sqlCommand.ExecuteNonQuery();
+                        }
+                        catch (SqlException ex)
+                        {
+                            string exeption = ex.Message;
+                            if (exeption.Contains(login)) { MessageBox.Show($"Логин {login} уже занят. Придумайте другой логин!"); }
+                            if (exeption.Contains(mail)) { MessageBox.Show($"Почта {mail} уже привязана к другому аккаунту!"); }
+                            if (exeption.Contains(number)) { MessageBox.Show($"Телефон {number} уже привязан к другому аккаунту!"); }
 
-                    if (isAdded) 
+                            isAdded = false;
+
+                        }
+                        finally
+                        {
+                            sqlConnection.CloseAsync();
+                        }
+
+                        if (isAdded)
+                        {
+                            MessageBox.Show("Учетная запись создана! Дождитесь подтверждения от администратора, " +
+                            "после чего учетная запись станет активной");
+                        }
+
+                        Return();
+                        Close();
+                    }
+                    else
                     {
-                        MessageBox.Show("Учетная запись создана! Дождитесь подтверждения от администратора, " +
-                        "после чего учетная запись станет активной");
+                        MessageBox.Show("Произошла ошибка! Попробуйте позже.");
                     }
-
-                    Return();
-                    Close();
                 }
             }
         }

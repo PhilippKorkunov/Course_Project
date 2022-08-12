@@ -5,12 +5,18 @@ namespace Course_Project
 {
     internal class SqlProcessing
     {
-        internal static SqlConnection OpenConnection(string dbName)
+        internal static bool TryOpenConnection(string dbName, out SqlConnection sqlConnection)
         {
             string connection = ConfigurationManager.ConnectionStrings[dbName].ToString();
-            SqlConnection sqlConnection = new SqlConnection(connection);
+            sqlConnection = new SqlConnection(connection);
+
             sqlConnection.Open();
-            return sqlConnection;
+            if (sqlConnection.State == System.Data.ConnectionState.Open)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

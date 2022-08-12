@@ -40,7 +40,7 @@ namespace Course_Project
             string password = passwordBox.Password;
 
             bool isValid = Validation.IsLoginingValid(login, password);
-            bool isAuthorized = Authorization.AuthorizationCheck(login, password);
+            bool isAuthorized = Authorization.TryAuthtorizate(login, password);
 
             if (isValid && isAuthorized)
             {

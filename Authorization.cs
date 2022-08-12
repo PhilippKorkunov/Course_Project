@@ -11,14 +11,16 @@ namespace Course_Project
 {
     internal class Authorization
     {
-        internal static bool AuthorizationCheck(string login, string password)
+        internal static bool TryAuthtorizate(string login, string password)
         {
-            var sqlConnection = SqlProcessing.OpenConnection("UserDB");
-            sqlConnection.Open();
+            SqlConnection sqlConnection;
+            var isConnected = SqlProcessing.TryOpenConnection("UserDB", out sqlConnection);
 
-            SqlCommand sqlCommand = new SqlCommand($"SELECT Login, Password FROM UsersDB WHERE Login IN('{login}')", sqlConnection);
-            var userArray = sqlCommand.ExecuteReader();
-
+            if (isConnected)
+            {
+                SqlCommand sqlCommand = new SqlCommand($"SELECT Login, Password FROM UsersDB WHERE Login IN('{login}')", sqlConnection);
+                var userArray = sqlCommand.ExecuteReader();
+            }
 
             return true;
         }
