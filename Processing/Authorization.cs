@@ -35,6 +35,11 @@ namespace Course_Project.Processing
 
             Task.WaitAll(Task.Run(FindInUsers), Task.Run(FindInSuperUsers));
 
+            if (!IsFound)
+            {
+                MessageBox.Show("Пользователь с такими данными не существует. Проверьте правильность введенных данных!");
+            }
+
             isAdmin = IsAdmin;
             isSuperUser = IsSuperUser;
 
@@ -43,7 +48,7 @@ namespace Course_Project.Processing
 
         void IsUserInTable(string dbName)
         {
-            var sqlConnection = new SqlConnection();
+            SqlConnection sqlConnection;
             var isConnected = SqlProcessing.TryOpenConnection("UsersDB", out sqlConnection);
             using (sqlConnection)
             {
