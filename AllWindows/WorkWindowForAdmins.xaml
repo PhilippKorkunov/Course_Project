@@ -5,8 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Course_Project.AllWindows"
         mc:Ignorable="d"
-        Title="WorkWindowForAdmins" Height="450" Width="800">
+        Title="Аукцион" Height="600" Width="800">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFEBDADA" Offset="0.9"/>
+            <GradientStop Color="#FF946969" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
     <Grid>
-        
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFC8B59C" Offset="1"/>
+                <GradientStop Color="White" Offset="0.26"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="40*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <Button x:Name="tableChangeButton" Height="50" Width="200" Content="Сменить Таблицу" FontSize="18" Background="Cornsilk"/>
+            <TextBlock Height="10"/>
+            <Button x:Name="downloadButton" Height="50" Width="200" Content="Скачать Таблицу" FontSize="18" Background="Cornsilk"/>
+            <TextBlock Height="10"/>
+            <Button x:Name="changeButton" Height="50" Width="200" Content="Применить Изменения" FontSize="18" Background="Cornsilk"/>
+            <TextBlock Height="10"/>
+            <Button x:Name="usersAdministrationButton" Height="50" Width="200" Content="Пользователи" FontSize="18" Background="Cornsilk"/>
+        </StackPanel>
     </Grid>
 </Window>

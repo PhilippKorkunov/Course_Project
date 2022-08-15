@@ -22,6 +22,18 @@ namespace Course_Project
         public WorkWindowForUsers()
         {
             InitializeComponent();
+            tableChangeButton.Click += (s, e) => ChangeDB();
+            downloadButton.Click += (s, e) => DownloadDB();
+        }
+
+        void ChangeDB()
+        {
+
+        }
+
+        void DownloadDB()
+        {
+
         }
     }
 }

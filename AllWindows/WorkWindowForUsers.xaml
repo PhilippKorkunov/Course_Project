@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Course_Project"
         mc:Ignorable="d"
-        Title="WorkWindow" Height="600" Width="800">
+        Title="Аукцион" Height="600" Width="800">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FFEBDADA" Offset="0.9"/>
@@ -22,15 +22,23 @@
 
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="60*"/>
-            <RowDefinition Height="20*"/>
+            <RowDefinition Height="100"/> 
+            <RowDefinition Height="80*"/>
             <RowDefinition Height="20*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="40*"/>
         </Grid.ColumnDefinitions>
+
+        <TextBlock x:Name="tableName" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <Button x:Name="tableChangeButton" Height="50" Width="200" Content="Сменить Таблицу" FontSize="20" Background="Cornsilk"/>
+            <TextBlock Height="10"/>
+            <Button x:Name="downloadButton" Height="50" Width="200" Content="Скачать Таблицу" FontSize="20" Background="Cornsilk"/>
+        </StackPanel>
 
     </Grid>
 </Window>
