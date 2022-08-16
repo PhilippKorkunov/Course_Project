@@ -14,6 +14,8 @@ namespace Course_Project
         {
             InitializeComponent();
 
+            FindingDB.FindRealDbPaths();
+
             logInButton.Click += (s, e) => UserCheck();
             registrationButton.Click += (s, e) => RegistrationPage();
             //showPasswordButton.Click += (s, e) => ShowPassword();
