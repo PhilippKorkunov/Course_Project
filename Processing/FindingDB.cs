@@ -3,21 +3,27 @@ using System.Configuration;
 using System.IO;
 using System.Windows;
 using System.Xml.Linq;
+using System.Reflection;
 
 namespace Course_Project.Processing
 {
     internal class FindingDB
     {
-        internal static string UsersDbPath { get; set; }
+        static string UsersDbPath { get; set; }
         static string AuctionsDbPath { get; set; }
+        static string[] Connection { get; set; }
+        internal static bool IsRealPath { get; set; }
 
         static FindingDB()
         {
-            string connection = ConfigurationManager.ConnectionStrings["UsersDB"].ToString();
-            UsersDbPath = connection.Split(new char[] { ';' })[1].Split(new char[] { '=' })[1];
+            IsRealPath = false;
+            Connection = new string[2];
 
-            connection = ConfigurationManager.ConnectionStrings["AuctionsDB"].ToString();
-            AuctionsDbPath = connection.Split(new char[] { ';' })[1].Split(new char[] { '=' })[1];
+            Connection[0] = ConfigurationManager.ConnectionStrings["UsersDB"].ToString();
+            UsersDbPath = Connection[0].Split(new char[] { ';' })[1].Split(new char[] { '=' })[1];
+
+            Connection[1] = ConfigurationManager.ConnectionStrings["AuctionsDB"].ToString();
+            AuctionsDbPath = Connection[1].Split(new char[] { ';' })[1].Split(new char[] { '=' })[1];
         }
 
         internal static void FindRealDbPaths()
@@ -40,9 +46,30 @@ namespace Course_Project.Processing
                 AuctionsDbPath = UsersDbPath + "AuctionsDbDirectory\\AuctionsDB.mdf";
                 UsersDbPath += "UsersDbDirectory\\UsersDataBase.mdf";
 
-                MessageBox.Show(File.Exists(AuctionsDbPath).ToString());
+                UpdateAppConfig();
+            }
+            else
+            {
+                IsRealPath = true;
             }
             
+        }
+
+        static void UpdateAppConfig()
+        {
+            MessageBox.Show(Connection[0] + "\n" + Connection[1]);
+
+            var parts = Connection[0].Split(new char[] { ';' });
+            var parts2 = parts[1].Split(new char[] { '=' });
+
+            string newConnectionStringUsers = $"{parts[0]};{parts2[0]}={UsersDbPath};{parts[2]}";
+
+            parts = Connection[1].Split(new char[] { ';' });
+            parts2 = parts[1].Split(new char[] { '=' });
+
+            string newConnectionStringAuctions = $"{parts[0]};{parts2[0]}={AuctionsDbPath};{parts[2]}";
+
+           
         }
     }
 }
