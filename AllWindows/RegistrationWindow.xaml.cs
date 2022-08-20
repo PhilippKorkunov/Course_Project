@@ -61,29 +61,45 @@ namespace Course_Project
             {
                 if (Validation.IsRegistrationValid(login, password, mail, number, name, surname, patronymic))
                 {
-                    bool isAdded = true;
+                    bool isAdded = false;
 
-                    SqlConnection sqlConnection;
-                    bool isConneceted = SqlProcessing.TryOpenConnection("UsersDB", out sqlConnection);
+                    SqlConnection sqlConnection1, sqlConnection2, sqlConnection3, sqlConnection4, sqlConnection5;
+                    bool isConneceted1 = SqlProcessing.TryOpenConnection("UsersDB", out sqlConnection1);
+                    bool isConneceted2 = SqlProcessing.TryOpenConnection("UsersDB", out sqlConnection2);
+                    bool isConneceted3 = SqlProcessing.TryOpenConnection("UsersDB", out sqlConnection3);
+                    bool isConneceted4 = SqlProcessing.TryOpenConnection("UsersDB", out sqlConnection4);
+                    bool isConneceted5 = SqlProcessing.TryOpenConnection("UsersDB", out sqlConnection5);
 
-                    SqlCommand sqlCommand = new SqlCommand("INSERT INTO [Users] (Name, Surname, Patronymic, Email, PhoneNumber, Login, Password) " +
-                        $"VALUES (N'{name}', N'{surname}', N'{patronymic}', '{mail}', '{number}', '{login}', CONVERT(varbinary, '{password}'))", sqlConnection);
+                    SqlCommand sqlCommand = new SqlCommand("INSERT INTO [Waiters] (Name, Surname, Patronymic, Email, PhoneNumber, Login, Password) " +
+                        $"VALUES (N'{name}', N'{surname}', N'{patronymic}', '{mail}', '{number}', '{login}', CONVERT(varbinary, '{password}'))", sqlConnection1);
 
                     SqlCommand sqlCommandCheckSuperUser = new SqlCommand(
-                        $"SELECT Login FROM SuperUsers\r\nWhere Login = '{login}'", sqlConnection);
+                        $"SELECT Login FROM SuperUsers\r\nWhere Login = '{login}'", sqlConnection2);
 
-                    if (isConneceted)
+                    SqlCommand sqlCommandCheckUser3 = new SqlCommand(
+                        $"SELECT * FROM Users\r\nWhere Login = '{login}'", sqlConnection3);
+
+                    SqlCommand sqlCommandCheckUser4 = new SqlCommand(
+                        $"SELECT * FROM Users\r\nWhere Email = '{mail}'", sqlConnection4);
+
+                    SqlCommand sqlCommandCheckUser5 = new SqlCommand(
+                        $"SELECT * FROM Users\r\nWhere PhoneNumber = '{number}'", sqlConnection5);
+
+                    if (isConneceted1 && isConneceted2 && isConneceted3 && isConneceted4 && isConneceted5)
                     {
                         try
                         {
-                            if (!sqlCommandCheckSuperUser.ExecuteReader().HasRows)
-                            {
-                                sqlCommand.ExecuteNonQuery();
-                            }
+                            if (sqlCommandCheckSuperUser.ExecuteReader().HasRows || sqlCommandCheckUser3.ExecuteReader().HasRows) 
+                            { MessageBox.Show($"Логин {login} уже занят. Придумайте другой логин!"); }
+
+                            else if (sqlCommandCheckUser4.ExecuteReader().HasRows) { MessageBox.Show($"Почта {mail} уже привязана к другому аккаунту!"); }
+
+                            else if (sqlCommandCheckUser5.ExecuteReader().HasRows) { MessageBox.Show($"Телефон {number} уже привязан к другому аккаунту!"); }
+
                             else
                             {
-                                MessageBox.Show($"Логин {login} уже занят. Придумайте другой логин!");
-                                isAdded = false;
+                                sqlCommand.ExecuteNonQuery();
+                                isAdded = true;
                             }
                         }
                         catch (SqlException ex)
@@ -97,16 +113,19 @@ namespace Course_Project
                         }
                         finally
                         {
-                            sqlConnection.CloseAsync();
+                            sqlConnection1.CloseAsync();
+                            sqlConnection2.CloseAsync();
+                            sqlConnection3.CloseAsync();
                         }
 
                         if (isAdded)
                         {
                             MessageBox.Show("Учетная запись создана! Дождитесь подтверждения от администратора, " +
                             "после чего учетная запись станет активной");
+                            Return();
                         }
 
-                        Return();
+                        
                     }
                     else
                     {

@@ -17,7 +17,6 @@ namespace Course_Project.Processing
 
         private bool IsFound { get; set; }
         private bool IsAdmin { get; set; }
-
         private bool IsSuperUser { get; set; }
 
         internal Authorization()
@@ -46,7 +45,7 @@ namespace Course_Project.Processing
             return IsFound;
         }
 
-        void IsUserInTable(string dbName)
+        void IsUserInTable(string tableName)
         {
             SqlConnection sqlConnection;
             var isConnected = SqlProcessing.TryOpenConnection("UsersDB", out sqlConnection);
@@ -54,26 +53,27 @@ namespace Course_Project.Processing
             {
                 if (isConnected)
                 {
-                    string aditionalPart = dbName == "Users" ? ", Admin" : "";
+                    string aditionalPart = tableName == "Users" ? ", Admin" : "";
 
-                    SqlCommand sqlCommand = new SqlCommand($"SELECT Login, Password{aditionalPart} FROM {dbName}\r\nWhere Login = '{Login}' AND Password = '{Password}'", sqlConnection);
-                    var reader = sqlCommand.ExecuteReader();    
-
-                    if (reader.HasRows)
+                    SqlCommand sqlCommand = new SqlCommand($"SELECT Login, Password{aditionalPart} FROM {tableName}\r\nWhere Login = '{Login}' AND Password = '{Password}'", sqlConnection);
+                    using (var reader = sqlCommand.ExecuteReader())
                     {
-                        if (dbName == "SuperUsers")
+                        if (reader.HasRows)
                         {
-                            IsSuperUser = true;
-                        }
-                        else
-                        {
-                            while (reader.Read())
+                            if (tableName == "SuperUsers")
                             {
-                                IsAdmin = reader["Admin"].ToString() == "False" ? false : true;
+                                IsSuperUser = true;
                             }
-                        }
+                            else
+                            {
+                                while (reader.Read())
+                                {
+                                    IsAdmin = reader["Admin"].ToString() == "False" ? false : true;
+                                }
+                            }
 
-                        IsFound = true;
+                            IsFound = true;
+                        }
                     }
                 }
                 else

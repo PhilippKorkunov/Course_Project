@@ -14,7 +14,7 @@ namespace Course_Project
         {
             InitializeComponent();
 
-            if (!FindingDB.IsRealPath) { FindingDB.FindRealDbPaths(); }
+            //if (!FindingDB.IsRealPath) { FindingDB.FindRealDbPaths(); }
 
             logInButton.Click += (s, e) => UserCheck();
             registrationButton.Click += (s, e) => RegistrationPage();

@@ -68,8 +68,6 @@ namespace Course_Project.Processing
             parts2 = parts[1].Split(new char[] { '=' });
 
             string newConnectionStringAuctions = $"{parts[0]};{parts2[0]}={AuctionsDbPath};{parts[2]}";
-
-           
         }
     }
 }

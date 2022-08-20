@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlClient;
 using System.Configuration;
+using System.Data;
 
 namespace Course_Project.Processing
 {
@@ -19,5 +20,30 @@ namespace Course_Project.Processing
             sqlConnection.CloseAsync();
             return false;
         }
+
+        internal static DataSet ShowTable(string tableName, out SqlDataAdapter sqlDataAdapter, 
+            out SqlConnection sqlConnection)
+        {
+            bool isConnected = SqlProcessing.TryOpenConnection("AuctionsDB", out sqlConnection);
+
+            if (isConnected)
+            {
+                sqlDataAdapter = new SqlDataAdapter(
+                    $"SELECT * FROM {tableName}", sqlConnection);
+
+                DataSet data = new DataSet();
+
+                sqlDataAdapter.Fill(data);
+
+                return data;
+            }
+            else
+            {
+                sqlDataAdapter = null;
+                return null;
+            }
+        }
     }
+
+
 }

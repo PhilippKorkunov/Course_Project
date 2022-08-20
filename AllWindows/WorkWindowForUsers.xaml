@@ -30,15 +30,20 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="tableName" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25"/>
+        <TextBlock x:Name="tableName" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25" Grid.Row="0" Grid.Column="1"/>
 
         <StackPanel Grid.Row="1" Grid.Column="0">
             <Button x:Name="tableChangeButton" Height="50" Width="200" Content="Сменить Таблицу" FontSize="20" Background="Cornsilk"/>
             <TextBlock Height="10"/>
             <Button x:Name="downloadButton" Height="50" Width="200" Content="Скачать Таблицу" FontSize="20" Background="Cornsilk"/>
         </StackPanel>
+
+        <DataGrid Grid.Row="1" Grid.Column="1" IsReadOnly="True" RowHeight="50" x:Name="DbShowDataGrid" Background="Cornsilk" ColumnWidth="Auto">
+        </DataGrid>
+        
 
     </Grid>
 </Window>

@@ -1,0 +1,30 @@
+﻿<Window x:Class="Course_Project.AllWindows.ChoseDownloadFormatWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Course_Project.AllWindows"
+        mc:Ignorable="d"
+        Title="Формат Сохранения Таблицы" Height="250" Width="250">
+
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFEBDADA" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Сохранить как" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20"/>
+
+        <Button x:Name="ExcelButton" Grid.Row="1" Height="30" Width="150" Content="Excel" FontSize="14" Background="Cornsilk"/>
+
+        <Button x:Name="WordButton" Grid.Row="2" Height="30" Width="150" Content="Word" FontSize="14" Background="Cornsilk"/>
+
+
+    </Grid>
+</Window>

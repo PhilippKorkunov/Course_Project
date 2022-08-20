@@ -30,6 +30,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="1" Grid.Column="0">
@@ -42,5 +43,22 @@
             <Button x:Name="usersAdministrationButton" Height="50" Width="200" Content="Пользователи" FontSize="18" Background="Cornsilk"/>
         </StackPanel>
 
+        <DataGrid Grid.Row="1" Grid.Column="1" IsReadOnly="False" RowHeight="50" x:Name="DbShowDataGrid" Background="Cornsilk" 
+                  AutoGenerateColumns="True">
+            <DataGrid.Resources>
+                <Style x:Key="ElementStyle" TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridCell}}" Value="True">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+        </DataGrid>
+
+        <TextBlock x:Name="tableName" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25" Grid.Row="0" Grid.Column="1"/>
+
+        <Button x:Name="deliteSelectedButton" Grid.Column="1" Grid.Row="2" Height="40" Width="210" 
+                Margin="0,0,0,20" Background="Cornsilk" Content="Удалить Выбранные Строки" FontSize="15"/>
     </Grid>
 </Window>

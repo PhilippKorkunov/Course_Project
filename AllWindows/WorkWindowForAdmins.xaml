@@ -41,5 +41,12 @@
             <TextBlock Height="10"/>
             <Button x:Name="usersAdministrationButton" Height="50" Width="200" Content="Пользователи" FontSize="18" Background="Cornsilk"/>
         </StackPanel>
+
+
+        <DataGrid Grid.Row="1" Grid.Column="1" IsReadOnly="True" RowHeight="50" x:Name="DbShowDataGrid" Background="Cornsilk" ColumnWidth="Auto">
+        </DataGrid>
+
+        <TextBlock x:Name="tableName" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25" Grid.Row="0" Grid.Column="1"/>
+
     </Grid>
 </Window>
