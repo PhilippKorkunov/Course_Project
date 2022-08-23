@@ -44,16 +44,8 @@
         </StackPanel>
 
         <DataGrid Grid.Row="1" Grid.Column="1" IsReadOnly="False" RowHeight="50" x:Name="DbShowDataGrid" Background="Cornsilk" 
-                  AutoGenerateColumns="True">
-            <DataGrid.Resources>
-                <Style x:Key="ElementStyle" TargetType="TextBlock">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridCell}}" Value="True">
-                            <Setter Property="TextWrapping" Value="Wrap" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.Resources>
+                  AutoGeneratingColumn="OnAutoGeneratingColumn"
+                  >
         </DataGrid>
 
         <TextBlock x:Name="tableName" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25" Grid.Row="0" Grid.Column="1"/>

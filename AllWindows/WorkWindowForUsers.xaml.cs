@@ -40,9 +40,11 @@ namespace Course_Project
         }
 
         void DownloadDB()
-        {
-            ChoseDownloadFormatWindow choseDownloadFormatWindow = new ChoseDownloadFormatWindow(Data);
-            choseDownloadFormatWindow.ShowDialog();
+        {   if (Data != null)
+            {
+                ChoseDownloadFormatWindow choseDownloadFormatWindow = new ChoseDownloadFormatWindow(Data);
+                choseDownloadFormatWindow.ShowDialog();
+            }
         }
 
         void RefreshData()
@@ -50,7 +52,7 @@ namespace Course_Project
             SqlDataAdapter sqlDataAdapter;
             SqlConnection sqlConnection;
 
-            Data = SqlProcessing.ShowTable(CurrentTableName, out sqlDataAdapter, out sqlConnection);
+            Data = SqlProcessing.ShowTable("AuctionsDB", CurrentTableName, out sqlDataAdapter, out sqlConnection);
             Connection = sqlConnection;
 
             DbShowDataGrid.ItemsSource = Data.Tables[0].AsDataView();

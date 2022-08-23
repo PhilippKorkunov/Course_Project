@@ -1,9 +1,16 @@
 ﻿using Aspose.Cells;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.Win32;
+using System;
 using System.Data;
 using System.IO;
 using System.Windows;
-using Workbook = Aspose.Cells.Workbook;
+using Spire.Doc;
+using Spire.Doc.Documents;
+using Document = Spire.Doc.Document;
+using Paragraph = Spire.Doc.Documents.Paragraph;
+using Spire.DataExport.RTF;
 
 namespace Course_Project.AllWindows
 {
@@ -17,7 +24,7 @@ namespace Course_Project.AllWindows
             Data = data;
             InitializeComponent();
             WordButton.Click += (s, e) => DownloadWord();
-            ExcelButton.Click += (s, e) => DownloadExcel(false);
+            ExcelButton.Click += (s, e) => DownloadExcel();
         }
 
         DataSet Data { get; set; }
@@ -32,37 +39,34 @@ namespace Course_Project.AllWindows
                 return;
             }
 
-            DownloadExcel(true, path);
-            
-            Workbook workbook = new Workbook("MyExcelFile.xls");
 
-            workbook.Save(path, SaveFormat.Docx);
-
-            File.Delete("MyExcelFile.xls");
+            RTFExport rtfExport = new RTFExport();
+            rtfExport.DataSource = Spire.DataExport.Common.ExportSource.DataTable;
+            rtfExport.DataTable = Data.Tables[0];
+            rtfExport.ActionAfterExport = Spire.DataExport.Common.ActionType.OpenView;
+            rtfExport.FileName = path;
+            rtfExport.SaveToFile();
 
             Close();
         }
 
-        void DownloadExcel(bool isWord, string path = null)
+        void DownloadExcel()
         {
-            if (!isWord)
-            {
-                path = ChosePath(false);
+            string path = ChosePath(false);
 
-                if (path == null)
-                {
-                    MessageBox.Show("Неправильно выбран путь! Повторите попытку");
-                    return;
-                }
-            }
-            else
+            if (path == null)
             {
-                path = "MyExcelFile.xls";
+                MessageBox.Show("Неправильно выбран путь! Повторите попытку");
+                return;
             }
 
             if (Data != null)
             {
-                ExcelLibrary.DataSetHelper.CreateWorkbook(path, Data);
+                using (XLWorkbook workbook = new XLWorkbook())
+                {
+                    workbook.Worksheets.Add(Data);
+                    workbook.SaveAs(path);
+                }
             }
             else
             {
@@ -75,7 +79,7 @@ namespace Course_Project.AllWindows
         string ChosePath(bool isWord)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = isWord == false ? "Excel files (*.xls)|*.xls" : "Word files (*docx)|*.docx";
+            saveFileDialog.Filter = isWord == false ? "Excel Workbook|*.xlsx" : "Word files (*doc)|*.doc";
             saveFileDialog.InitialDirectory = @"C:\";
             if (saveFileDialog.ShowDialog() == true)
             {

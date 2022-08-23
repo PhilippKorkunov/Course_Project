@@ -116,6 +116,8 @@ namespace Course_Project
                             sqlConnection1.CloseAsync();
                             sqlConnection2.CloseAsync();
                             sqlConnection3.CloseAsync();
+                            sqlConnection4.CloseAsync();
+                            sqlConnection5.CloseAsync();
                         }
 
                         if (isAdded)

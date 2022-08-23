@@ -74,19 +74,7 @@ namespace Course_Project
             }
         }
 
-       /* async void ShowPassword()
-        {
-            passwordShowBlock.Text = passwordBox.Password;
-            passwordShowBlock.Visibility = Visibility.Visible;
-            passwordBox.Password = null;
-            isShowen = true;
-            await Task.Run(async () =>
-            {
-                Thread.Sleep(1000);
-                passwordShowBlock.Visibility = Visibility.Collapsed;
-                passwordBox.Password = passwordShowBlock.Text;
-            });
-        }*/
+      
 
     }
 }

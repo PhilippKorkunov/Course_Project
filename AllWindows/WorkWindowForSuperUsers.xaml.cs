@@ -32,6 +32,7 @@ namespace Course_Project.AllWindows
             changeButton.Click += (s, e) => UpdateDB();
             deliteSelectedButton.Click += (s, e) => Button_DeleteSelectedRows();
             usersAdministrationButton.Click += (s, e) => UsersAdministrate();
+            this.Closing += (s, e) => Window_Closing();
 
             RefreshData();
         }
@@ -53,23 +54,34 @@ namespace Course_Project.AllWindows
 
         void DownloadDB()
         {
-            ChoseDownloadFormatWindow choseDownloadFormatWindow = new ChoseDownloadFormatWindow(Data);
-            choseDownloadFormatWindow.ShowDialog();
+            if (Data != null)
+            {
+                ChoseDownloadFormatWindow choseDownloadFormatWindow = new ChoseDownloadFormatWindow(Data);
+                choseDownloadFormatWindow.ShowDialog();
+            }
         }
 
         void RefreshData()
         {
+            if (Connection != null)
+            {
+                Connection.CloseAsync();
+            }
+
             SqlDataAdapter sqlDataAdapter;
             SqlConnection sqlConnection;
 
-            Data = SqlProcessing.ShowTable(CurrentTableName, out sqlDataAdapter, out sqlConnection);
+            Data = SqlProcessing.ShowTable("AuctionsDB", CurrentTableName, out sqlDataAdapter, out sqlConnection);
             DataAdapter = sqlDataAdapter;
             Connection = sqlConnection;
 
             DbShowDataGrid.ItemsSource = Data.Tables[0].AsDataView();
             DbShowDataGrid.DataContext = Data.Tables[0];
+            
+
             tableName.Text = $"Таблица {CurrentTableName}";
         }
+
 
         void UpdateDB()
         {
@@ -82,26 +94,18 @@ namespace Course_Project.AllWindows
                     DataAdapter.Update(Data);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
+                MessageBox.Show("Проверьте, все ли необходимые поля были заполнены и правильно ли указаны Id");
             }
         }
 
-        void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        void Window_Closing()
         {
             if (Connection != null)
             {
-                Connection.CloseAsync();
-            }
-        }
-
-        private void dataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            DataGrid dataGrid = (DataGrid)sender;
-            DataGridTextColumn? column = e.Column as DataGridTextColumn;
-            if (column != null)
-            {
-                column.ElementStyle = dataGrid.Resources["ElementStyle"] as Style;
+                Connection.Close();
             }
         }
 
@@ -123,7 +127,6 @@ namespace Course_Project.AllWindows
                     int rowsCount = DbShowDataGrid.SelectedItems.Count;
                     for (int i = 0; i < rowsCount; i++)
                     {
-                        MessageBox.Show(i.ToString());
                         int selectedIndex = DbShowDataGrid.SelectedIndex;
                         if (Data != null)
                         {
@@ -133,21 +136,25 @@ namespace Course_Project.AllWindows
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("Возникла ошибка! Повторите попытку!");
-                MessageBox.Show(ex.Message);
             }
         }
 
         void UsersAdministrate()
         {
-
+            UserAdministrationWindow userAdministrationWindow = new UserAdministrationWindow();
+            userAdministrationWindow.ShowDialog();
         }
 
-
-
-
+        private void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyType == typeof(DateTime))
+            {
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "yyyy.MM.dd";
+            }
+        }
     }
 }
 
