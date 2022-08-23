@@ -1,5 +1,5 @@
 ﻿<Window x:Class="Course_Project.AllWindows.WorkWindowForAdmins"
-         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -44,16 +44,8 @@
         </StackPanel>
 
         <DataGrid Grid.Row="1" Grid.Column="1" IsReadOnly="False" RowHeight="50" x:Name="DbShowDataGrid" Background="Cornsilk" 
-                  AutoGenerateColumns="True">
-            <DataGrid.Resources>
-                <Style x:Key="ElementStyle" TargetType="TextBlock">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridCell}}" Value="True">
-                            <Setter Property="TextWrapping" Value="Wrap" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.Resources>
+                  AutoGeneratingColumn="OnAutoGeneratingColumn"
+                  >
         </DataGrid>
 
         <TextBlock x:Name="tableName" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25" Grid.Row="0" Grid.Column="1"/>
@@ -62,3 +54,4 @@
                 Margin="0,0,0,20" Background="Cornsilk" Content="Удалить Выбранные Строки" FontSize="15"/>
     </Grid>
 </Window>
+

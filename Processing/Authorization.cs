@@ -23,11 +23,10 @@ namespace Course_Project.Processing
         {
             IsFound = false;
             IsAdmin = false;
-            IsSuperUser = false;
         }
 
 
-        internal bool TryAuthtorizate(string login, string password, out bool isAdmin, out bool isSuperUser)
+        internal bool TryAuthtorizate(string login, string password, out bool isAdmin)
         {
             Login = login;
             Password = password;
@@ -40,7 +39,6 @@ namespace Course_Project.Processing
             }
 
             isAdmin = IsAdmin;
-            isSuperUser = IsSuperUser;
 
             return IsFound;
         }
@@ -62,7 +60,7 @@ namespace Course_Project.Processing
                         {
                             if (tableName == "SuperUsers")
                             {
-                                IsSuperUser = true;
+                                IsAdmin = true;
                             }
                             else
                             {

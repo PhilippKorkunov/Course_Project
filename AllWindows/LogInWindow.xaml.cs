@@ -14,11 +14,8 @@ namespace Course_Project
         {
             InitializeComponent();
 
-            //if (!FindingDB.IsRealPath) { FindingDB.FindRealDbPaths(); }
-
             logInButton.Click += (s, e) => UserCheck();
             registrationButton.Click += (s, e) => RegistrationPage();
-            //showPasswordButton.Click += (s, e) => ShowPassword();
         }
 
         bool isShowen = false;
@@ -27,10 +24,10 @@ namespace Course_Project
         {
             string login = loginBox.Text;
             string password = passwordBox.Password;
-            bool isAdmin, isSuperUser;
+            bool isAdmin;
 
             bool isValid = Validation.IsLoginingValid(login, password);
-            bool isAuthorized = new Authorization().TryAuthtorizate(login, password, out isAdmin, out isSuperUser);
+            bool isAuthorized = new Authorization().TryAuthtorizate(login, password, out isAdmin);
 
 
             if (isValid && isAuthorized)
@@ -38,11 +35,6 @@ namespace Course_Project
                 if (isAdmin)
                 {
                     WorkWindowForAdmins workWindow = new WorkWindowForAdmins();
-                    workWindow.Show();
-                }
-                else if (isSuperUser)
-                {
-                    WorkWindowForSuperUsers workWindow = new WorkWindowForSuperUsers();
                     workWindow.Show();
                 }
                 else
@@ -61,7 +53,7 @@ namespace Course_Project
             Close();
         }
 
-        public void PasswordChanged(object sender, RoutedEventArgs e)
+        void PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(passwordBox.Password))
             {

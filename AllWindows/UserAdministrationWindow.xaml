@@ -44,7 +44,7 @@
                    Text="Запрос на добавление" TextWrapping="Wrap" Height="60" Width="120"/>
 
         <Button x:Name="acceptButton" Grid.Column="1" Grid.Row="4" Height="30" Width="100" 
-                Margin="0,0,200,10" Background="Cornsilk" Content="Принять" FontSize="15"/>
+                Margin="0,0,200,10" Background="Cornsilk" Content="Добавить" FontSize="15"/>
 
         <Button x:Name="deliteButton" Grid.Column="1" Grid.Row="4" Height="30" Width="100" 
                 Margin="200,0,0,10" Background="Cornsilk" Content="Удалить" FontSize="15"/>

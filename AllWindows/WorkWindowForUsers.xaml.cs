@@ -1,11 +1,10 @@
 ﻿using Course_Project.AllWindows;
 using Course_Project.Processing;
+using System;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Windows;
-using System.Windows.Markup;
-using System.Xml.Linq;
+using System.Windows.Controls;
 
 
 namespace Course_Project
@@ -40,7 +39,8 @@ namespace Course_Project
         }
 
         void DownloadDB()
-        {   if (Data != null)
+        {   
+            if (Data != null)
             {
                 ChoseDownloadFormatWindow choseDownloadFormatWindow = new ChoseDownloadFormatWindow(Data);
                 choseDownloadFormatWindow.ShowDialog();
@@ -49,6 +49,11 @@ namespace Course_Project
 
         void RefreshData()
         {
+            if (Connection != null)
+            {
+                Connection.CloseAsync();
+            }
+
             SqlDataAdapter sqlDataAdapter;
             SqlConnection sqlConnection;
 
@@ -64,6 +69,14 @@ namespace Course_Project
             if (Connection != null)
             {
                 Connection.CloseAsync();
+            }
+        }
+
+        void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyType == typeof(DateTime))
+            {
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "yyyy.MM.dd";
             }
         }
     }

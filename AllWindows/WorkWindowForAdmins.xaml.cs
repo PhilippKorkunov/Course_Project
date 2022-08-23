@@ -1,19 +1,9 @@
 ﻿using Course_Project.Processing;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Course_Project.AllWindows
 {
@@ -76,8 +66,11 @@ namespace Course_Project.AllWindows
 
             DbShowDataGrid.ItemsSource = Data.Tables[0].AsDataView();
             DbShowDataGrid.DataContext = Data.Tables[0];
+
+
             tableName.Text = $"Таблица {CurrentTableName}";
         }
+
 
         void UpdateDB()
         {
@@ -90,9 +83,10 @@ namespace Course_Project.AllWindows
                     DataAdapter.Update(Data);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Проверьте, все ли необходимые поля были заполнены");
+                MessageBox.Show(ex.Message);
+                MessageBox.Show("Проверьте, все ли необходимые поля были заполнены и правильно ли указаны Id");
             }
         }
 
@@ -104,7 +98,7 @@ namespace Course_Project.AllWindows
             }
         }
 
-        private void Button_DeleteSelectedRows()
+        void Button_DeleteSelectedRows()
         {
             try
             {
@@ -143,6 +137,12 @@ namespace Course_Project.AllWindows
             userAdministrationWindow.ShowDialog();
         }
 
+        private void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyType == typeof(DateTime))
+            {
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "yyyy.MM.dd";
+            }
+        }
     }
 }
-

@@ -94,13 +94,20 @@ namespace Course_Project.AllWindows
                     if (WaitersData != null)
                     {
                         var row = WaitersData.Tables[0].Rows[selectedIndex];
-                        SqlCommand sqlCommand = new SqlCommand("INSERT INTO [Users] (Name, Surname, Patronymic, Email," +
-                            " PhoneNumber, Login, Password, Admin) " +
-                    $"VALUES (N'{row["Name"]}', N'{row["Surname"]}', " +
-                    $"N'{row["Patronymic"]}', '{row["Email"]}', '{row["PhoneNumber"]}', '{row["Login"]}', CONVERT(varbinary, '{row["Password"]}'), '{row["Admin"]}') ", UsersConnection);
+                        if (row["Login"] != null && row["Login"] != "Admin")
+                        {
+                            SqlCommand sqlCommand = new SqlCommand("INSERT INTO [Users] (Name, Surname, Patronymic, Email," +
+                                " PhoneNumber, Login, Password, Admin) " +
+                        $"VALUES (N'{row["Name"]}', N'{row["Surname"]}', " +
+                        $"N'{row["Patronymic"]}', '{row["Email"]}', '{row["PhoneNumber"]}', '{row["Login"]}', CONVERT(varbinary, '{row["Password"]}'), '{row["Admin"]}') ", UsersConnection);
 
-                        sqlCommand.ExecuteNonQuery();
-                        row.Delete(); 
+                            sqlCommand.ExecuteNonQuery();
+                            row.Delete();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Нельзя создать пользователя с таким логином!");
+                        }
                     }
                     
                     UpdateDB();

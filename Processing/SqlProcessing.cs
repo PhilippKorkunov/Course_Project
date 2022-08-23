@@ -25,18 +25,12 @@ namespace Course_Project.Processing
         internal static DataSet ShowTable(string dbName, string tableName, out SqlDataAdapter sqlDataAdapter, 
             out SqlConnection sqlConnection)
         {
-            bool isConnected = SqlProcessing.TryOpenConnection(dbName, out sqlConnection);
+            bool isConnected = TryOpenConnection(dbName, out sqlConnection);
 
             if (isConnected)
             {
                 sqlDataAdapter = new SqlDataAdapter(
                     $"SELECT * FROM {tableName}", sqlConnection);
-
-                if (tableName == "Auctions")
-                {
-                    sqlDataAdapter = new SqlDataAdapter(
-                    $"SELECT Id_Auction, Id_Place, Date, Time FROM {tableName}", sqlConnection);
-                }
 
                 DataSet data = new DataSet();
 

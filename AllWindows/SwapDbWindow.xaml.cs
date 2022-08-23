@@ -24,19 +24,19 @@ namespace Course_Project.AllWindows
         {
             IsSwaped = false;
             InitializeComponent();
-            Auctions.Click += (s, e) => FindNewDnName(s);
-            Buiers.Click += (s, e) => FindNewDnName(s);
-            Items.Click += (s, e) => FindNewDnName(s);
-            Lots.Click += (s, e) => FindNewDnName(s);
-            Places.Click += (s, e) => FindNewDnName(s);
-            Sellers.Click += (s, e) => FindNewDnName(s);
-            Sellings.Click += (s, e) => FindNewDnName(s);
+            Auctions.Click += (s, e) => FindNewDbName(s);
+            Buiers.Click += (s, e) => FindNewDbName(s);
+            Items.Click += (s, e) => FindNewDbName(s);
+            Lots.Click += (s, e) => FindNewDbName(s);
+            Places.Click += (s, e) => FindNewDbName(s);
+            Sellers.Click += (s, e) => FindNewDbName(s);
+            Sellings.Click += (s, e) => FindNewDbName(s);
         }
 
         internal string? NewTableName { get; set; }
         internal bool IsSwaped { get; set; }
 
-        void FindNewDnName(object s)
+        void FindNewDbName(object s)
         {
             NewTableName = (s as Button).Content.ToString();
             IsSwaped = true;

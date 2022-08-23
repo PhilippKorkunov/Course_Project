@@ -43,8 +43,8 @@ namespace Course_Project.AllWindows
             RTFExport rtfExport = new RTFExport();
             rtfExport.DataSource = Spire.DataExport.Common.ExportSource.DataTable;
             rtfExport.DataTable = Data.Tables[0];
-            rtfExport.ActionAfterExport = Spire.DataExport.Common.ActionType.OpenView;
             rtfExport.FileName = path;
+            rtfExport.ActionAfterExport = Spire.DataExport.Common.ActionType.None;
             rtfExport.SaveToFile();
 
             Close();
