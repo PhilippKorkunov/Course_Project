@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Course_Project.AllWindows"
         mc:Ignorable="d"
         Title="Аукцион" Height="600" Width="800">
     <Window.Background>
@@ -23,7 +22,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
-            <RowDefinition Height="80*"/>
+            <RowDefinition Height="160*"/>
             <RowDefinition Height="20*"/>
         </Grid.RowDefinitions>
 
@@ -34,23 +33,33 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="1" Grid.Column="0">
-            <Button x:Name="tableChangeButton" Height="50" Width="200" Content="Сменить Таблицу" FontSize="18" Background="Cornsilk"/>
+            <Button x:Name="InsertButton" Height="50" Width="200" Content="Добавить Запись" FontSize="18" Background="Cornsilk"/>
             <TextBlock Height="10"/>
-            <Button x:Name="downloadButton" Height="50" Width="200" Content="Скачать Таблицу" FontSize="18" Background="Cornsilk"/>
+            <Button x:Name="UpdateButton" Height="50" Width="200" Content="Изменить Запись" FontSize="18" Background="Cornsilk"/>
             <TextBlock Height="10"/>
-            <Button x:Name="changeButton" Height="50" Width="200" Content="Применить Изменения" FontSize="18" Background="Cornsilk"/>
+            <Button x:Name="DeleteButton" Height="50" Width="200" Content="Удалить Запись" FontSize="18" Background="Cornsilk"/>
             <TextBlock Height="10"/>
-            <Button x:Name="usersAdministrationButton" Height="50" Width="200" Content="Пользователи" FontSize="18" Background="Cornsilk"/>
+            <Button x:Name="JoinButton" Height="50" Width="200" Content="Объединить" FontSize="18" Background="Cornsilk"/>
+            <TextBlock Height="10"/>
+            <Button x:Name="TableChangeButton" Height="50" Width="200" Content="Сменить Таблицу" FontSize="18" Background="Cornsilk"/>
+            <TextBlock Height="10"/>
+            <Button x:Name="DownloadButton" Height="50" Width="200" Content="Скачать Таблицу" FontSize="18" Background="Cornsilk"/>
+            <TextBlock Height="10"/>
+            <Button x:Name="UsersAdministrationButton" Height="50" Width="200" Content="Пользователи" FontSize="18" Background="Cornsilk"/>
         </StackPanel>
 
         <DataGrid Grid.Row="1" Grid.Column="1" IsReadOnly="False" RowHeight="50" x:Name="DbShowDataGrid" Background="Cornsilk" 
-                  AutoGeneratingColumn="OnAutoGeneratingColumn"
-                  >
+                  AutoGeneratingColumn="OnAutoGeneratingColumn" SelectionUnit="CellOrRowHeader">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="GroupBy" Name="RightButtonClick" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
 
-        <TextBlock x:Name="tableName" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25" Grid.Row="0" Grid.Column="1"/>
+        <TextBlock x:Name="TableName" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25" Grid.Row="0" Grid.Column="1"/>
 
-        <Button x:Name="deliteSelectedButton" Grid.Column="1" Grid.Row="2" Height="40" Width="210" 
+        <Button Visibility="Hidden" x:Name="DeliteSelectedButton" Grid.Column="1" Grid.Row="2" Height="40" Width="210" 
                 Margin="0,0,0,20" Background="Cornsilk" Content="Удалить Выбранные Строки" FontSize="15"/>
     </Grid>
 </Window>

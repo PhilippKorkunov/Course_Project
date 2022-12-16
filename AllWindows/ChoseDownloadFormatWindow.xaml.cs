@@ -1,15 +1,7 @@
-﻿using Aspose.Cells;
-using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
+﻿using ClosedXML.Excel;
 using Microsoft.Win32;
-using System;
 using System.Data;
-using System.IO;
 using System.Windows;
-using Spire.Doc;
-using Spire.Doc.Documents;
-using Document = Spire.Doc.Document;
-using Paragraph = Spire.Doc.Documents.Paragraph;
 using Spire.DataExport.RTF;
 
 namespace Course_Project.AllWindows

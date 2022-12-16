@@ -1,5 +1,6 @@
 ﻿using Course_Project.Processing;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
@@ -7,27 +8,30 @@ using System.Windows.Controls;
 
 namespace Course_Project.AllWindows
 {
-    /// <summary>
-    /// Логика взаимодействия для WorkWindowForAdmins.xaml
-    /// </summary>
     public partial class WorkWindowForAdmins : Window
     {
         public WorkWindowForAdmins()
         {
             CurrentTableName = "Auctions";
             InitializeComponent();
-            tableChangeButton.Click += (s, e) => SwapDB();
-            downloadButton.Click += (s, e) => DownloadDB();
-            changeButton.Click += (s, e) => UpdateDB();
-            deliteSelectedButton.Click += (s, e) => Button_DeleteSelectedRows();
-            usersAdministrationButton.Click += (s, e) => UsersAdministrate();
+            TableChangeButton.Click += (s, e) => SwapDB();
+            DownloadButton.Click += (s, e) => DownloadDB();
+            //ChangeButton.Click += (s, e) => UpdateDB();
+            //DeliteSelectedButton.Click += (s, e) => Button_DeleteSelectedRows();
+            UsersAdministrationButton.Click += (s, e) => UsersAdministrate();
+            InsertButton.Click += (s, e) => Insert();
             this.Closing += (s, e) => Window_Closing();
+            RightButtonClick.Click += (s, e) => GroupMenu();
+            DeleteButton.Click += (s, e) => Delete();
+            UpdateButton.Click += (s, e) => Update();
+            JoinButton.Click += (s, e) => Join();
 
             RefreshData();
         }
 
         string CurrentTableName { get; set; }
         DataSet? Data { get; set; }
+        //DataSet? SortedData { get; set; }
         SqlDataAdapter? DataAdapter { get; set; }
         SqlConnection? Connection { get; set; }
 
@@ -50,7 +54,7 @@ namespace Course_Project.AllWindows
             }
         }
 
-        void RefreshData()
+        void RefreshData(string? groupByCommand = null, string? joinCommand = null)
         {
             if (Connection != null)
             {
@@ -60,74 +64,19 @@ namespace Course_Project.AllWindows
             SqlDataAdapter sqlDataAdapter;
             SqlConnection sqlConnection;
 
-            Data = SqlProcessing.ShowTable("AuctionsDB", CurrentTableName, out sqlDataAdapter, out sqlConnection);
-            DataAdapter = sqlDataAdapter;
-            Connection = sqlConnection;
+            var data = SqlProcessing.ShowTable("AuctionsDB", CurrentTableName, out sqlDataAdapter, 
+                out sqlConnection, groupByCommand, joinCommand);
 
-            DbShowDataGrid.ItemsSource = Data.Tables[0].AsDataView();
-            DbShowDataGrid.DataContext = Data.Tables[0];
-
-
-            tableName.Text = $"Таблица {CurrentTableName}";
-        }
-
-
-        void UpdateDB()
-        {
-            try
+            if (data != null)
             {
-                if (Data != null && DataAdapter != null)
-                {
-                    SqlCommandBuilder builder = new SqlCommandBuilder(DataAdapter);
-                    DataAdapter.UpdateCommand = builder.GetUpdateCommand();
-                    DataAdapter.Update(Data);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                MessageBox.Show("Проверьте, все ли необходимые поля были заполнены и правильно ли указаны Id");
-            }
-        }
+                Data = data;
+                DataAdapter = sqlDataAdapter;
+                Connection = sqlConnection;
 
-        void Window_Closing()
-        {
-            if (Connection != null)
-            {
-                Connection.Close();
-            }
-        }
+                DbShowDataGrid.ItemsSource = Data.Tables[0].AsDataView();
+                DbShowDataGrid.DataContext = Data.Tables[0];
 
-        void Button_DeleteSelectedRows()
-        {
-            try
-            {
-                if (DbShowDataGrid.SelectedItems.Count == 1)
-                {
-                    int selectedIndex = DbShowDataGrid.SelectedIndex;
-                    if (Data != null)
-                    {
-                        var row = Data.Tables[0].Rows[selectedIndex];
-                        row.Delete();
-                    }
-                }
-                else if (DbShowDataGrid.SelectedItems.Count > 1)
-                {
-                    int rowsCount = DbShowDataGrid.SelectedItems.Count;
-                    for (int i = 0; i < rowsCount; i++)
-                    {
-                        int selectedIndex = DbShowDataGrid.SelectedIndex;
-                        if (Data != null)
-                        {
-                            var row = Data.Tables[0].Rows[selectedIndex + i];
-                            row.Delete();
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Возникла ошибка! Повторите попытку!");
+                TableName.Text = $"Таблица {CurrentTableName}";
             }
         }
 
@@ -137,11 +86,103 @@ namespace Course_Project.AllWindows
             userAdministrationWindow.ShowDialog();
         }
 
+        void Insert()
+        {
+            if (Connection != null && Data != null)
+            {
+                InsertWindow insertWindow = new InsertWindow(CurrentTableName, Data);
+                insertWindow.ShowDialog();
+                RefreshData();
+            }
+            else
+            {
+                MessageBox.Show("Нет соединения с БД или же таблица пустая");
+            }
+        }
+
+        void Update()
+        {
+            if (Connection != null && Data != null)
+            {
+                UpdateWindow updateWindow = new UpdateWindow(CurrentTableName, Data);
+                updateWindow.ShowDialog();
+                RefreshData();
+            }
+            else
+            {
+                MessageBox.Show("Нет соединения с БД или же таблица пустая");
+            }
+        }
+
+        void Delete()
+        {
+            if (Connection != null && Data != null)
+            {
+                DeleteWindow deleteWindow = new DeleteWindow(CurrentTableName);
+                deleteWindow.ShowDialog();
+                RefreshData();
+            }
+            else
+            {
+                MessageBox.Show("Нет соединения с БД или же таблица пустая");
+            }
+        }
+
         private void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (e.PropertyType == typeof(DateTime))
             {
                 (e.Column as DataGridTextColumn).Binding.StringFormat = "yyyy.MM.dd";
+            }
+        }
+
+        void GroupMenu()
+        {
+            string? columnName = DbShowDataGrid.SelectedCells[0].Column.Header.ToString();
+
+            if (columnName != null)
+            {
+                string command = "SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS \r\n  " +
+                    $"WHERE table_name = '{CurrentTableName}' AND COLUMN_NAME = '{columnName}';";
+                string columnType = SqlProcessing.ExecuteCommand(command, true)[0];
+
+                if (columnType == "int" || columnType == "decimal")
+                {
+                    GroupByWindow groupByWindow = new GroupByWindow(CurrentTableName);
+                    groupByWindow.ShowDialog();
+
+                    if (!String.IsNullOrEmpty(groupByWindow.GroupByCommand))
+                    {
+                        RefreshData(groupByCommand:groupByWindow.GroupByCommand);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Группировать по условию можно только числовые значения");
+                }
+            }
+        }
+
+        void Join()
+        {
+            JoinWindow joinWindow = new JoinWindow();
+            joinWindow.ShowDialog();
+            if (!String.IsNullOrEmpty(joinWindow.JoinCommand))
+            {
+                var dataToCheck = Data;
+                RefreshData(joinCommand: joinWindow.JoinCommand);
+                if (Data != dataToCheck)
+                {
+                    TableName.Text = $"InnerJoin таблиц {joinWindow.FirstTableName} и {joinWindow.SecondTableName}";
+                }
+            }
+        }
+
+        void Window_Closing()
+        {
+            if (Connection != null)
+            {
+                Connection.Close();
             }
         }
     }
